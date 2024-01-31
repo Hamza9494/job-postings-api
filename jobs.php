@@ -61,7 +61,7 @@ if ($user_email) {
 
         //class objects
         $gateaway = new Jobs_gateaway($database);
-        $process = new Process_requests($gateaway, $user["id"]);
+        $controller = new Process_requests($gateaway, $user["id"]);
 
 
         var_dump($user);
