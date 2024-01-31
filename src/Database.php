@@ -1,22 +1,12 @@
-<?php 
-class Database {
-    public function __construct($host , $user , $db_name , $password)
+<?php
+class Database
+{
+    public function __construct(private $host, private $user, private $password, private $dbname)
     {
-        $mysqli = new mysqli($host , $user , $password , $db_name);
+    }
 
-        if($mysqli->connect_errno) {
-     throw new Exception("connection error for no reason ");
-      
-}
-
-return $mysqli;
-
+    public function connect()
+    {
+        return new mysqli($this->host, $this->user, $this->password, $this->dbname);
     }
 }
-
- 
-
-
-
-
-?>
