@@ -19,6 +19,9 @@ class Process_requests
     {
         switch ($method) {
             case "post":
+                $job = json_decode(file_get_contents("php://input"), true);
+                var_dump($job);
+                break;
         };
     }
 

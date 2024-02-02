@@ -38,7 +38,6 @@ $token = explode("Bearer ", $headers["Authorization"]);
 
 $token = $token[1];
 
-var_dump($token);
 
 $decoded_token = JWT::decode($token, new Key("mykey2014", "HS256"));
 
@@ -49,7 +48,7 @@ $user_email = $decoded_token["user_email"];
 
 if ($user_email) {
     try {
-        //$mysqli = new mysqli("localhost", "root", "", "job_postings");
+
         $database = new Database("localhost", "root", "", "job_postings");
         $mysqli = $database->connect();
         $sql = "SELECT * from users WHERE email = ?";
@@ -62,9 +61,7 @@ if ($user_email) {
         //class objects
         $gateaway = new Jobs_gateaway($database);
         $controller = new Process_requests($gateaway, $user["id"]);
-
-
-        var_dump($user);
+        $controller->process_all_request($_SERVER["REQUEST_METHOD"], $user["id"]);
     } catch (Exception $e) {
         echo $e->getMessage();
     };
