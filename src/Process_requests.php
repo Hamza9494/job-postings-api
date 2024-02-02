@@ -1,7 +1,8 @@
 <?php
 class Process_requests
 {
-    public function __construct(Jobs_gateaway $gateaway, private $author_id)
+
+    public function __construct(private Jobs_gateaway $gateaway, private $user_id)
     {
     }
 
@@ -10,7 +11,7 @@ class Process_requests
         if ($id) {
             $this->proecess_resource_request($id);
         } else {
-            $this->process_collection_request($method, $this->author_id);
+            $this->process_collection_request($method, $this->user_id);
         }
     }
 
@@ -18,10 +19,14 @@ class Process_requests
     private function process_collection_request($method, $user_id)
     {
         switch ($method) {
-            case "post":
+            case "POST":
                 $job = json_decode(file_get_contents("php://input"), true);
-                var_dump($job);
+                $id = $this->gateaway->create($job, $user_id);
+                echo json_encode(["job_added" => true, "id" => $id]);
                 break;
+            case "GET":
+                $jobs = $this->gateaway->get_all($user_id);
+                echo json_encode($jobs);
         };
     }
 

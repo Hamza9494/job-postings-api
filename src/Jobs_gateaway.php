@@ -15,5 +15,19 @@ class Jobs_gateaway
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("isssssi", $user_id, $job["client"], $job["title"], $job["technologies"], $job["description"], $job["experience"], $job["price"]);
         $stmt->execute();
+        return $this->conn->insert_id;
+    }
+
+    public function get_all($user_id)
+    {
+        $sql = "SELECT * from jobs WHERE $user_id = ?";
+        $mysqli = $this->conn;
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("s", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $jobs = [$result->fetch_all(MYSQLI_ASSOC)];
+
+        return $jobs;
     }
 }

@@ -61,7 +61,7 @@ if ($user_email) {
         //class objects
         $gateaway = new Jobs_gateaway($database);
         $controller = new Process_requests($gateaway, $user["id"]);
-        $controller->process_all_request($_SERVER["REQUEST_METHOD"], $user["id"]);
+        $controller->process_all_request($_SERVER['REQUEST_METHOD'], $id);
     } catch (Exception $e) {
         echo $e->getMessage();
     };
