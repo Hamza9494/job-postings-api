@@ -30,4 +30,39 @@ class Jobs_gateaway
 
         return $jobs;
     }
+
+    public function get($id)
+    {
+        $sql = "SELECT * FROM jobs WHERE id = ?";
+        $mysqli = $this->conn;
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $job = $result->fetch_assoc();
+        return $job;
+    }
+
+    public function delete($id)
+    {
+        $sql = "DELETE from jobs WHERE id = ?";
+        $mysqli = $this->conn;
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        if ($stmt->execute()) {
+            return $mysqli->affected_rows;
+        }
+    }
+
+    public function update($old_job, $new_job)
+    {
+        $client = $new_job["client"];
+        var_dump($client);
+        $sql = "UPDATE jobs SET client = ? WHERE id = ?";
+        $mysqli = $this->conn;
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("si", $client, $id);
+        $stmt->execute();
+    }
 }
