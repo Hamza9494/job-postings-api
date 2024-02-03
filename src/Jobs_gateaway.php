@@ -55,14 +55,20 @@ class Jobs_gateaway
         }
     }
 
-    public function update($old_job, $new_job)
+    public function update($old_job, $new_job, $id)
     {
-        $client = $new_job["client"];
-        var_dump($client);
-        $sql = "UPDATE jobs SET client = ? WHERE id = ?";
+        $client = $new_job["client"] ?? $old_job["client"];
+        $title = $new_job["title"] ?? $old_job["title"];
+        $description = $new_job["description"] ?? $old_job["description"];
+        $technologies = $new_job["technologies"] ?? $old_job["technologies"];
+        $experience = $new_job["experience"] ?? $old_job["experience"];
+        $price = $new_job["price"] ?? $old_job["price"];
+
+        $sql = "UPDATE jobs SET client = ?  , title = ? , description = ? , technologies = ? , experience = ? , price = ? WHERE id = ?";
         $mysqli = $this->conn;
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("si", $client, $id);
+        $stmt->bind_param("sssssii", $client, $title, $description, $technologies, $experience, $price, $id);
         $stmt->execute();
+        return $mysqli->affected_rows;
     }
 }
