@@ -23,6 +23,7 @@ class Process_requests
             case "POST":
                 $job = json_decode(file_get_contents("php://input"), true);
                 $id = $this->gateaway->create($job, $user_id);
+                $user = "alex";
                 if ($id) {
                     echo json_encode(["job_added" => true, "id" => $id]);
                     http_response_code(201);
