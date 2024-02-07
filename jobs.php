@@ -40,6 +40,7 @@ $user_email = $decoded_token["user_email"];
 
 
 if ($user_email) {
+
     try {
 
         $database = new Database("localhost", "root", "", "job_postings");
