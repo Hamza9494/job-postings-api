@@ -1,4 +1,2 @@
 <?php
-
-
-echo "hello world from index.php";
+echo 'why the fuck source control is not working my dude wtf';
