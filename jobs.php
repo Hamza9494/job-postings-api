@@ -21,6 +21,8 @@ if ($parts[3] !== "jobs.php") {
     die("nothing for u here my dude");
 }
 
+$test = "tes git";
+
 
 $id = $parts[4] ?? null;
 
