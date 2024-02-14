@@ -21,7 +21,6 @@ if ($parts[3] !== "jobs.php") {
     die("nothing for u here my dude");
 }
 
-$test = "tes git";
 
 
 $id = $parts[4] ?? null;
@@ -54,9 +53,10 @@ if ($user_email) {
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
 
+
         //class objects
         $gateaway = new Jobs_gateaway($database);
-        $controller = new Process_requests($gateaway, $user["id"]);
+        $controller = new Process_requests($gateaway, $user["id"], $user["type"], $user["name"]);
         $controller->process_all_request($_SERVER['REQUEST_METHOD'], $id);
     } catch (Exception $e) {
         echo $e->getMessage();

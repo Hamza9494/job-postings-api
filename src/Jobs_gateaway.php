@@ -18,18 +18,28 @@ class Jobs_gateaway
         return $this->conn->insert_id;
     }
 
-    public function get_all($user_id)
+    public function get_all($user_id,  $client, $type = "client")
     {
-        $sql = "SELECT * from jobs WHERE $user_id = ?";
-        $mysqli = $this->conn;
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("s", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $jobs = [$result->fetch_all(MYSQLI_ASSOC)];
+        $jobs = "";
+
+        if ($type === "freelancer") {
+            $sql = "SELECT * FROM jobs";
+            $mysqli = $this->conn;
+            $result = $mysqli->query($sql);
+            $jobs = [$result->fetch_all(MYSQLI_ASSOC)];
+        } else {
+            $sql = "SELECT * from jobs WHERE client = ?";
+            $mysqli = $this->conn;
+            $stmt = $mysqli->prepare($sql);
+            $stmt->bind_param("s", $client);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $jobs = [$result->fetch_all(MYSQLI_ASSOC)];
+        }
 
         return $jobs;
     }
+
 
     public function get($id)
     {

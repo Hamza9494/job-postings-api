@@ -2,7 +2,7 @@
 class Process_requests
 {
 
-    public function __construct(private Jobs_gateaway $gateaway, private $user_id)
+    public function __construct(private Jobs_gateaway $gateaway, private $user_id, private $type, private $client)
     {
     }
 
@@ -11,19 +11,18 @@ class Process_requests
         if ($id) {
             $this->proecess_resource_request($method, $id);
         } else {
-            $this->process_collection_request($method, $this->user_id);
+            $this->process_collection_request($method, $this->user_id, $this->type, $this->client);
         }
     }
 
 
-    private function process_collection_request($method, $user_id)
+    private function process_collection_request($method, $user_id, $type, $client)
     {
         switch ($method) {
 
             case "POST":
                 $job = json_decode(file_get_contents("php://input"), true);
                 $id = $this->gateaway->create($job, $user_id);
-                $user = "alex";
                 if ($id) {
                     echo json_encode(["job_added" => true, "id" => $id]);
                     http_response_code(201);
@@ -34,9 +33,15 @@ class Process_requests
                 break;
 
             case "GET":
-                $jobs = $this->gateaway->get_all($user_id);
-                echo json_encode($jobs);
+                if ($type === "client") {
+                    $jobs = $this->gateaway->get_all($user_id, $client);
+                    echo json_encode($jobs);
+                } else {
+                    $jobs = $this->gateaway->get_all($user_id, $client, $type);
+                    echo json_encode($jobs);
+                }
                 break;
+
             default:
                 http_response_code(405);
                 header("Allow methods: POST , GET");
